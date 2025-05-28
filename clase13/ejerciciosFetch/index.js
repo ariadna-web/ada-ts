@@ -10,11 +10,13 @@ para procesar el JSON.
 async function fetchCharacter() {
     try{
         const response =await fetch('https://rickandmortyapi.com/api/character')
-        if(!response.ok)throw new error(`el personaje no fue encontrado: ${response.status}`)
-            const character= await response.json()
-        console.log('datos del personaje', character)
+        
+         const character= await response.json()
+
+         const characterName=character.results[0].name
+        console.log('datos del personaje', characterName)
     }catch(error){
         console.error('error', error)
     }
 }
-fetchCharacter(2)
+fetchCharacter()

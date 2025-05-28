@@ -9,7 +9,7 @@ Pistas:
 
 async function fetchPokemon(id) {
     try{
-        const response=await fetch(`https://pokeapi.co/api/v2/pokemon/1${id}`)
+        const response=await fetch(`https://pokeapi.co/api/v2/pokemon/2${id}`)
         if(!response.ok)throw new error('el poquemon no fue encontrado: ', response.status)
             const pokemon=await response.json()
         const name=pokemon.name;
@@ -20,4 +20,4 @@ async function fetchPokemon(id) {
         console.error('error', error)
     }
 }
-fetchPokemon(1)
+fetchPokemon(0)
