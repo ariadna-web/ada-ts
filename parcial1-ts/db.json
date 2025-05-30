@@ -1,0 +1,28 @@
+{
+  "Books": [
+    {
+      "id": 1,
+      "titulo": "El Hobbit",
+      "autor": "J.R.R. Tolkien",
+      "anio": 1937
+    },
+    {
+      "id": 2,
+      "titulo": "La Comunidad del Anillo",
+      "autor": "J.R.R. Tolkien",
+      "anio": 1954
+    },
+    {
+      "id": 3,
+      "titulo": "Las Dos Torres",
+      "autor": "J.R.R. Tolkien",
+      "anio": 1954
+    },
+    {
+      "id": 4,
+      "titulo": "El Retorno del Rey",
+      "autor": "J.R.R. Tolkien",
+      "anio": 1955
+    }
+  ]
+}
