@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Calendario</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: auto; }
+    form { margin-top: 2em; }
+    ul { list-style: none; padding: 0; }
+    li { margin: 0.5em 0; background: #eee; padding: 0.5em; }
+    button { margin-left: 0.5em; }
+  </style>
+</head>
+<body>
+  <h1>Fechas Importantes</h1>
+  <form id="addItemForm">
+    <input type="text" id="title" placeholder="Título" required>
+    <input type="date" id="date" required>
+    <button type="submit">Agregar Fecha</button>
+  </form>
+  <ul id="itemsList"></ul>
+  <p id="message"></p>
+  <script>
+    const API_URL = 'http://localhost:3000';
+    const token = localStorage.getItem('token');
+    const list = document.getElementById('itemsList');
+    const msg = document.getElementById('message');
+
+    if(!token){
+      window.location.href = 'login.html';
+    }
+
+    async function loadItems(){
+      const res = await fetch(`${API_URL}/items`, {
+        headers: { Authorization:` Bearer ${token}` }
+      });
+      const items = await res.json();
+      list.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.title} - ${item.date}`;
+        const del = document.createElement('button');
+        del.textContent = 'Eliminar';
+        del.onclick = async () => {
+          await fetch(`${API_URL}/items/${item.id}`, {
+            method: 'DELETE',
+            headers: { Authorization:` Bearer ${token}` }
+          });
+          loadItems();
+        };
+        li.appendChild(del);
+        list.appendChild(li);
+      });
+    }
+
+    loadItems();
+
+    document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const date = document.getElementById('date').value;
+      const res = await fetch(`${API_URL}/items`, {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ title, date })
+      });
+      if(res.ok){
+        msg.textContent = 'Fecha agregada correctamente';
+        loadItems();
+      } else {
+        const data = await res.json();
+        msg.textContent = data.error || 'Error';
+      }
+    });
+  </script>
+</body>
+</html>
