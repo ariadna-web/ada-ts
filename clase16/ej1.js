@@ -67,53 +67,13 @@ app.get("/Users/:id", (req, res) => {
     res.json(user);
 });
 
-/*app.post("/Users", (req, res) => {
-    const data = readData();
-    if(!data.Users){
-        data.Users=[]
-    }
-    const body = req.body;
-    if(!body.name){
-        return res.status(400).json({error:'falta el nombre del usuario'})
-    }
-    const newUser = {
-        id: data.Users.length > 0 ? data.Users[data.Users.length - 1].id + 1 : 1,
-        ...body,
-    }
-    data.Users.push(newUser);
-    writeData(data);
-    res.json(newUser);
-});*/
-app.post('/register',async(req,res)=>{
-    const {id, name}=req.body;
-    if(!id||!name){
-        return res.status(400).json({error:'campos obligatoriios'})
-    }
-        const dataBase=JSON.parse(fs.readFileSync(dataBasePath, 'utf-8'));
-        const userExist=dataBase.find((user)=>user.id===id)
-        if(userExist){
-            return res.status(400).json({error:'usuario ya existente'});
-        }
-        const newUser={id:id,name:name}
-        dataBase.push(newUser)
-        fs.writeFileSync(dataBasePath, JSON.stringify(dataBase,null,2));
-        res.status(201).json({message:'usuario creado con exito'});
-    });
-    app.post('/login',async(req,res)=>{
-        const{name}=req.body;
-        if(!name){
-        return res.status(400).json({error:'campos obligatoriios'})
-    }
-       const dataBase=JSON.parse(fs.readFileSync(dataBasePath, 'utf-8'));
-       const user=dataBase.find((user)=>user.name===name)
-       if(!user){
-        return res.status(401).json({error:'usuaqrio no encontrado'})
-       }
-       
-        const token=jwt.sign({id:user.id,id:user.id},SECRET_KEY,{expiresIn: '1h'})
-           res.json({message:'iniciob de session exitoso'})
-    
-    });
+app.post('/', (req,res)=>{
+    const newContact=req.body;
+    const contacts=json.parse(fs.readFileSync(dataBasePath,'utf-8'))
+    contacts.push(newContact)
+    fs.writeFileSync(dataBasePath, JSON.stringify(contacts,null,2))
+    res.json({message:'contacto agregado: ',contacts: newContact})
+})
         function autenticacionToken(req,res,next){
         const authHeader=req.headers['authorization'];
         const token=authHeader&&authHeader.split(' ')[1];
